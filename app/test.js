@@ -9,9 +9,11 @@ var dom = document.getElementById("container");
     ;
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
+        setTimeout(function(){myChart.resize();}, 0);
     }
     document.addEventListener('message', function(e) {
         var option = JSON.parse(e.data);
-        myChart.setOption(option);
+        myChart.setOption(option, true);
+        myChart.resize()
     });
 `

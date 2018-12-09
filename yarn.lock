@@ -2080,7 +2080,7 @@ fbjs-scripts@^1.0.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.9:
+fbjs@^0.8.17, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -4635,6 +4635,14 @@ react-is@^16.6.1:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
   integrity sha512-u7FDWtthB4rWibG/+mFbVd5FvdI20yde86qKGx4lVUTWmPlSWQ4QxbBIrrs+HnXGbxOUlUzTAP/VDmvCwaP2yA==
+
+react-native-webview@^2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-2.14.0.tgz#def9fd91bcd6bca3b16c4a1e7ed0f0881e89f942"
+  integrity sha512-24frICMSPwr9/j2mvR9kD/NWs542eS3kFkM+VUX0iL8/x5csW1ZBKjc+InApqDNNDIOUKsBzA7PgYa+EvJhiaA==
+  dependencies:
+    escape-string-regexp "^1.0.5"
+    fbjs "^0.8.17"
 
 react-native@0.57.7:
   version "0.57.7"

@@ -7,7 +7,8 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, WebView, SafeAreaView} from 'react-native';
+import {Platform, StyleSheet, Text, View, SafeAreaView, ActivityIndicator} from 'react-native';
+import { WebView } from "react-native-webview";
 
 import renderScript from './app/test'
 
@@ -93,7 +94,7 @@ const lineStackOptions = {
         trigger: 'axis'
     },
     legend: {
-        data:['邮件营销','联盟广告','视频广告','直接访问']
+        data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
     },
     grid: {
         left: '3%',
@@ -142,6 +143,44 @@ const lineStackOptions = {
         }
     ]
 };
+const pieOptions = {
+    title : {
+        text: '某站点用户访问来源',
+        subtext: '纯属虚构',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+    },
+    series : [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:234, name:'联盟广告'},
+                {value:135, name:'视频广告'},
+                {value:1548, name:'搜索引擎'}
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
 const js = renderScript(options);
 
 type Props = {};
@@ -150,7 +189,8 @@ export default class App extends Component<Props> {
     constructor(props){
         super(props)
         this.state = {
-            options: options
+            options: options,
+            loading: true,
         }
     }
 
@@ -159,21 +199,35 @@ export default class App extends Component<Props> {
             // this.setState({
             //     options: lineStackOptions,
             // })
+            this.refs.chart.postMessage(JSON.stringify(pieOptions));
+            console.log('update')
+        }, 5000);
+        setTimeout(() => {
+            // this.setState({
+            //     options: lineStackOptions,
+            // })
             this.refs.chart.postMessage(JSON.stringify(lineStackOptions));
-        }, 2000);
+            console.log('update2')
+        }, 8000);
     }
 
     render() {
-        console.log('render')
+        const {loading} = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <View style={{height:400,}}>
+                    {
+                        loading && <ActivityIndicator style={{flex: loading ? 1 : 0, height: loading ? 400 : 0}} />
+                    }
                 <WebView
                     ref="chart"
                     scrollEnabled={false}
-                    style={{backgroundColor: 'red', flex: 1,}}
+                    style={{backgroundColor: 'red', flex: loading ? 0 : 1, height: 400}}
                     source={html}
                     injectedJavaScript={renderScript(this.state.options)}
+                    onLoadEnd={() => {
+                        this.setState({loading: false,})
+                    }}
                     // injectedJavaScript={require('./app/test')}
                     // source={require('./app/line-bar.html')}
                     // source={{uri: 'http://localhost:3000/'}}
