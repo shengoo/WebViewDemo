@@ -18,6 +18,10 @@ const instructions = Platform.select({
         'Shake or press menu button for dev menu',
 });
 
+// const html = require('./app/tpl.html');
+import html from './app/tpl.html';
+console.log(html);
+
 const options = {
     tooltip: {
         trigger: 'axis',
@@ -26,14 +30,6 @@ const options = {
             crossStyle: {
                 color: '#999'
             }
-        }
-    },
-    toolbox: {
-        feature: {
-            dataView: {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-            saveAsImage: {show: true}
         }
     },
     legend: {
@@ -89,23 +85,100 @@ const options = {
         }
     ]
 };
-
-console.log(renderScript(options))
+const lineStackOptions = {
+    // title: {
+    //     text: '折线图堆叠'
+    // },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['邮件营销','联盟广告','视频广告','直接访问']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['周一','周二','周三','周四','周五','周六','周日']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'邮件营销',
+            type:'line',
+            stack: '总量',
+            data:[120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name:'联盟广告',
+            type:'line',
+            stack: '总量',
+            data:[220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name:'视频广告',
+            type:'line',
+            stack: '总量',
+            data:[150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name:'直接访问',
+            type:'line',
+            stack: '总量',
+            data:[320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name:'搜索引擎',
+            type:'line',
+            stack: '总量',
+            data:[820, 932, 901, 934, 1290, 1330, 1320]
+        }
+    ]
+};
+const js = renderScript(options);
 
 type Props = {};
 export default class App extends Component<Props> {
+
+    constructor(props){
+        super(props)
+        this.state = {
+            options: options
+        }
+    }
+
+    componentDidMount(): void {
+        setTimeout(() => {
+            // this.setState({
+            //     options: lineStackOptions,
+            // })
+            this.refs.chart.postMessage(JSON.stringify(lineStackOptions));
+        }, 2000);
+    }
+
     render() {
+        console.log('render')
         return (
             <SafeAreaView style={styles.container}>
+                <View style={{height:400,}}>
                 <WebView
+                    ref="chart"
+                    scrollEnabled={false}
                     style={{backgroundColor: 'red', flex: 1,}}
-                    source={require('./app/tpl.html')}
-                    injectedJavaScript={renderScript(options)}
+                    source={html}
+                    injectedJavaScript={renderScript(this.state.options)}
                     // injectedJavaScript={require('./app/test')}
                     // source={require('./app/line-bar.html')}
                     // source={{uri: 'http://localhost:3000/'}}
                 />
-
+                </View>
             </SafeAreaView>
         );
     }
